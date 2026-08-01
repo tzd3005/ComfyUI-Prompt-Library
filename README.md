@@ -77,6 +77,8 @@ ComfyUI/
 
 中文版包含一个可直接导入的 Z-image 文生图工作流：`ComfyUI_Prompt_Library_CN/ComfyUI_Prompt_Library_CN.json`
 
+![ComfyUI Prompt Library 工作流](ComfyUI_Prompt_Library.png)
+
 > 注：示例工作流依赖 Z-image 相关模型（UNET/CLIP/VAE），需自行准备对应模型文件。
 
 ## 🔧 输入参数说明（中文版）
