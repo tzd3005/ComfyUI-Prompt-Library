@@ -104,7 +104,7 @@ ComfyUI_Prompt_Library_V2|_CN/
 
 ## 📄 详细文档
 
-完整项目文档（含开发细节、版本历史、关键技术说明）见：[`ComfyUI_Prompt_Library_项目文档.md`](./ComfyUI_Prompt_Library_项目文档.md)（中文）
+完整节点参数、目录结构与开发说明见各包内的 `README.md`。
 
 ## 📝 License
 
