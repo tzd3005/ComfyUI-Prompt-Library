@@ -1,0 +1,788 @@
+{
+  "id": "73a947b2-d4d8-442c-a9f7-1e3edf32e1f7",
+  "revision": 0,
+  "last_node_id": 125,
+  "last_link_id": 137,
+  "nodes": [
+    {
+      "id": 63,
+      "type": "VAELoader",
+      "pos": [
+        428.5241541291083,
+        29.004314411717587
+      ],
+      "size": [
+        320,
+        106.65625
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            74
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.73",
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "ae.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/vae/ae.safetensors",
+            "directory": "vae"
+          }
+        ],
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        "Z_image_turb\\ae.safetensors"
+      ],
+      "color": "#332922",
+      "bgcolor": "#593930"
+    },
+    {
+      "id": 122,
+      "type": "ComfyUI_Prompt_Library_CN",
+      "pos": [
+        -936.8925306081587,
+        153.5665376744776
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "提示词文件",
+          "name": "提示词文件",
+          "type": "COMBO",
+          "widget": {
+            "name": "提示词文件"
+          },
+          "link": null
+        },
+        {
+          "label": "抽取模式",
+          "name": "抽取模式",
+          "type": "COMBO",
+          "widget": {
+            "name": "抽取模式"
+          },
+          "link": null
+        },
+        {
+          "label": "手动指定行",
+          "name": "手动指定行",
+          "type": "INT",
+          "widget": {
+            "name": "手动指定行"
+          },
+          "link": null
+        },
+        {
+          "label": "自动重载文件",
+          "name": "自动重载文件",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "自动重载文件"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "提示词",
+          "name": "提示词",
+          "type": "STRING",
+          "links": [
+            134
+          ]
+        },
+        {
+          "label": "摘要",
+          "name": "摘要",
+          "type": "STRING",
+          "links": [
+            136
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ComfyUI_Prompt_Library_CN"
+      },
+      "widgets_values": [
+        "SFW写真.txt",
+        "顺序(sequential)",
+        0,
+        true
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 65,
+      "type": "VAEDecode",
+      "pos": [
+        598.4798738014177,
+        -26.480068726303415
+      ],
+      "size": [
+        225,
+        96
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "Latent",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 73
+        },
+        {
+          "label": "VAE",
+          "name": "vae",
+          "type": "VAE",
+          "link": 74
+        }
+      ],
+      "outputs": [
+        {
+          "label": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            90,
+            137
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.64",
+        "Node name for S&R": "VAEDecode",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 125,
+      "type": "SaveImage",
+      "pos": [
+        538.5147103438158,
+        262.2239378748122
+      ],
+      "size": [
+        429.272793856534,
+        543.8181762695311
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "图像",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 137
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 78,
+      "type": "CLIPLoader",
+      "pos": [
+        -935.8629681777008,
+        -17.838094707876106
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            92
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.0",
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "Z_image_turb\\qwen_3_4b.safetensors",
+        "stable_diffusion",
+        "default"
+      ],
+      "color": "#332922",
+      "bgcolor": "#593930"
+    },
+    {
+      "id": 66,
+      "type": "UNETLoader",
+      "pos": [
+        -623.315568101591,
+        -160.488874615857
+      ],
+      "size": [
+        380,
+        134.65625
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "模型",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            85
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.73",
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "z_image_turbo_bf16.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors",
+            "directory": "diffusion_models"
+          }
+        ],
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        "z_image_turbo_int8_convrot.safetensors",
+        "default"
+      ],
+      "color": "#332922",
+      "bgcolor": "#593930"
+    },
+    {
+      "id": 123,
+      "type": "ComfyUI_Prompt_Preview_CN",
+      "pos": [
+        -615.3361962686703,
+        53.73355399860777
+      ],
+      "size": [
+        332.4000244140625,
+        199.20001220703125
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "文本",
+          "name": "文本",
+          "type": "STRING",
+          "link": 134
+        }
+      ],
+      "outputs": [
+        {
+          "label": "文本",
+          "name": "文本",
+          "type": "STRING",
+          "links": [
+            135
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ComfyUI_Prompt_Preview_CN"
+      },
+      "widgets_values": [
+        "一位身着黑色缎面紧身兔女郎连体衣的年轻女性站在舞台中央，她头戴一对高耸的黑色丝绒兔耳，长发披肩，乌黑柔顺的发丝自然垂落在肩头和胸前，发丝在灯光下泛着柔和光泽，几缕发丝轻拂过脸颊，增添了几分俏皮与性感，她的妆容精致完美，眼线勾勒出深邃的眼眸，唇色饱满红润，嘴角微微上扬，带着自信迷人的微笑，她右手抬起，食指和中指比出“打电话”的手势，手腕处佩戴着白色法式袖扣，左手轻抚腰间，姿态优雅而充满表现力，身体略微侧倾，展现出优美的曲线和修长的双腿，脚踩一双黑色高跟鞋，脚踝线条纤细，整体造型融合了时尚、性感与可爱元素，形成强烈的视觉冲击，前景是人物主体，占据画面中心位置，清晰突出，中景是光滑反光的深色舞台地面，倒映出人物身影和周围光线，地面上散落着细小的光影斑点，增强空间感和真实感，背景是一块巨大的红色LED屏幕，屏幕上隐约可见蓝色文字“THE 3RD MINI ALBUM”和一些模糊图案，屏幕表面带有细微颗粒质感和轻微噪点，呈现出现场活动的真实氛围，右侧有一台黑色舞台聚光灯，灯头朝向人物，发出微弱白光，为场景提供辅助照明，构图采用中心对称式布局，人物居中，视线聚焦于她，利用舞台纵深感营造层次，视觉引导从人物面部开始，顺着手指动作延伸至身体曲线，再向下引导至腿部和高跟鞋，形成流畅的视觉动线，光影来自前方和上方的专业舞台灯光，主光源明亮均匀，照亮人物正面，同时在身体侧面和地面产生柔和阴影，增强立体感，背景灯光呈暖红色调，与人物黑色服装形成强烈对比，营造出热烈、动感又略带神秘的氛围，整体画面色彩饱和度较高，色调以黑、红、白为主，辅以肤色和金属光泽，呈现出典型的娱乐活动现场风格，具有强烈的视觉张力和艺术感染力，仿佛捕捉到了一场精心策划的表演瞬间，画面质感细腻，细节丰富，既有专业摄影的精准度，又保留了现场拍摄的自然与真实感，如同用高端相机在灯光环境下抓拍的一帧珍贵影像，充满了故事性和观赏性"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 124,
+      "type": "ComfyUI_Prompt_Preview_CN",
+      "pos": [
+        -618.659932286071,
+        326.6499882692932
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "文本",
+          "name": "文本",
+          "type": "STRING",
+          "link": 136
+        }
+      ],
+      "outputs": [
+        {
+          "label": "文本",
+          "name": "文本",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ComfyUI_Prompt_Preview_CN"
+      },
+      "widgets_values": [
+        "[SFW写真.txt | 第22/5501行]"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 67,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -248.17857169172197,
+        34.00084226655971
+      ],
+      "size": [
+        386.1983067536157,
+        152.06613587939046
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "CLIP",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 92
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 135
+        }
+      ],
+      "outputs": [
+        {
+          "label": "条件",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            76,
+            84
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.73",
+        "Node name for S&R": "CLIPTextEncode",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        "一个女孩"
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
+    },
+    {
+      "id": 72,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        -243.4687703450524,
+        97.55301661635994
+      ],
+      "size": [
+        140,
+        26
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "条件",
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 84
+        }
+      ],
+      "outputs": [
+        {
+          "label": "条件",
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            83
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.0",
+        "Node name for S&R": "ConditioningZeroOut"
+      },
+      "widgets_values": [],
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 70,
+      "type": "KSampler",
+      "pos": [
+        -49.28030686264469,
+        -157.68009161448703
+      ],
+      "size": [
+        315,
+        341.3125
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "模型",
+          "name": "model",
+          "type": "MODEL",
+          "link": 85
+        },
+        {
+          "label": "正面条件",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 76
+        },
+        {
+          "label": "负面条件",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 83
+        },
+        {
+          "label": "Latent",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 78
+        }
+      ],
+      "outputs": [
+        {
+          "label": "Latent",
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            73
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.64",
+        "Node name for S&R": "KSampler",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        8,
+        1,
+        "res_multistep",
+        "simple",
+        1
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 68,
+      "type": "EmptySD3LatentImage",
+      "pos": [
+        -388.5601072776838,
+        314.0800509026031
+      ],
+      "size": [
+        260,
+        168
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "label": "Latent",
+          "name": "LATENT",
+          "type": "LATENT",
+          "slot_index": 0,
+          "links": [
+            78
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.64",
+        "Node name for S&R": "EmptySD3LatentImage",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65
+      },
+      "widgets_values": [
+        1024,
+        1280,
+        1
+      ],
+      "color": "#223",
+      "bgcolor": "#335"
+    },
+    {
+      "id": 76,
+      "type": "PreviewImage",
+      "pos": [
+        -68.88304440607482,
+        268.2001618632383
+      ],
+      "size": [
+        431.84788929332376,
+        563.9903544276211
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "图像",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 90
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.0",
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [
+      73,
+      70,
+      0,
+      65,
+      0,
+      "LATENT"
+    ],
+    [
+      74,
+      63,
+      0,
+      65,
+      1,
+      "VAE"
+    ],
+    [
+      76,
+      67,
+      0,
+      70,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      78,
+      68,
+      0,
+      70,
+      3,
+      "LATENT"
+    ],
+    [
+      83,
+      72,
+      0,
+      70,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      84,
+      67,
+      0,
+      72,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      85,
+      66,
+      0,
+      70,
+      0,
+      "MODEL"
+    ],
+    [
+      90,
+      65,
+      0,
+      76,
+      0,
+      "IMAGE"
+    ],
+    [
+      92,
+      78,
+      0,
+      67,
+      0,
+      "CLIP"
+    ],
+    [
+      134,
+      122,
+      0,
+      123,
+      0,
+      "STRING"
+    ],
+    [
+      135,
+      123,
+      0,
+      67,
+      1,
+      "STRING"
+    ],
+    [
+      136,
+      122,
+      1,
+      124,
+      0,
+      "STRING"
+    ],
+    [
+      137,
+      65,
+      0,
+      125,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8264462809917354,
+      "offset": [
+        1503.1310588517415,
+        221.99324821028154
+      ]
+    },
+    "frontendVersion": "1.45.21",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
