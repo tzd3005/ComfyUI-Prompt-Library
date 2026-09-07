@@ -15,14 +15,18 @@
 - 🔄 **自动重载**：修改 txt 文件后自动生效
 - 🌏 **中/英双语**：提供英文版与中文界面版两个包
 
+> **V2.1 新增**：在 V2 基础上叠加**单步文本编辑节点**（替换 / 前缀插入 / 后缀插入 / 删除，可选正则，可串联）。
+
 ## 📦 包含版本
 
 | 目录 | 说明 |
 |------|------|
-| `ComfyUI_Prompt_Library_V2` | **英文版**（节点界面为英文） |
-| `ComfyUI_Prompt_Library_CN` | **中文版**（节点界面为中文，含示例工作流） |
+| `ComfyUI_Prompt_Library_V2` | **英文版 V2**（原版，仅 Loader + Preview，节点界面为英文） |
+| `ComfyUI_Prompt_Library_CN` | **中文版 V2**（原版，仅 Loader + Preview，节点界面为中文，含示例工作流） |
+| `ComfyUI_Prompt_Library_V21` | **英文版 V2.1**（在原版基础上新增文本编辑节点） |
+| `ComfyUI_Prompt_Library_V21_CN` | **中文版 V2.1**（在原版基础上新增文本编辑节点） |
 
-两个版本功能一致，`className` 不同，可同时安装共存。
+**版本分层原则**：V2 与 CN 为**原版基线**，保持稳定、不再改动（除非修正 BUG）；新功能一律通过**新增版本**（如 V2.1）承载，迭代演进。各版本节点 `className` 互不相同，可同时安装共存。
 
 ## 🚀 安装
 
@@ -59,6 +63,8 @@ ComfyUI/
         └── realistic.txt
 ```
 
+> **⚠️ V2 / V2.1 路径差异**：V2 / CN 版本读取的是 **ComfyUI 根目录**下的 `prompt_library/`；而 **V2.1 版本**读取的是**插件自身目录**下的 `prompt_library/`（即 `custom_nodes/ComfyUI_Prompt_Library_V21/prompt_library/`，目录不存在会自动创建）。两者互不干扰。
+
 - 每行一条提示词
 - `#` / `//` / `;` 开头的行视为注释，自动跳过
 - 支持 UTF-8 / BOM 编码
@@ -77,7 +83,7 @@ ComfyUI/
 
 中文版包含一个可直接导入的 Z-image 文生图工作流：`ComfyUI_Prompt_Library_CN/ComfyUI_Prompt_Library_CN.json`
 
-![ComfyUI Prompt Library 工作流](ComfyUI_Prompt_Library.png)
+![ComfyUI Prompt Library V2.1 工作流](ComfyUI_Prompt_Library_V21.png)
 
 > 注：示例工作流依赖 Z-image 相关模型（UNET/CLIP/VAE），需自行准备对应模型文件。
 

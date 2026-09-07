@@ -1,7 +1,13 @@
-"""Prompt Library V2 nodes — Loader (with line metadata) + Preview display node."""
+"""Prompt Library V21 nodes — Loader (with line metadata) + Preview + Text Editor.
+
+V2.1 adds a single-step, chainable *text editor* node on top of the V2 feature
+set (Loader + Preview). Node classNames carry the V21 suffix so V2 and V2.1 can
+be installed side by side without conflicts.
+"""
 
 import os
 import random
+import re
 import time
 from pathlib import Path
 from typing import List, Tuple, Optional
@@ -28,19 +34,25 @@ def _refresh_file_list() -> List[Tuple[str, str]]:
     global _file_list_cache, _file_list_mtime
     now = time.time()
     if now - _file_list_mtime > 2.0:
-        base_dir = os.path.join(_custom_nodes_parent(), LIBRARY_DIR_NAME)
+        base_dir = os.path.join(_plugin_dir(), LIBRARY_DIR_NAME)
         ensure_library_dir(base_dir)
         _file_list_cache = scan_dir(base_dir)
         _file_list_mtime = now
     return _file_list_cache
 
 
-def _custom_nodes_parent() -> str:
-    return str(Path(__file__).resolve().parent.parent.parent)
+def _plugin_dir() -> str:
+    """Return this plugin's own directory.
+
+    V2.1 stores its ``prompt_library`` **inside the plugin folder**, i.e.
+    ``<custom_nodes>/ComfyUI_Prompt_Library_V21/prompt_library/``,
+    instead of under the ComfyUI root as in V2.
+    """
+    return str(Path(__file__).resolve().parent)
 
 
 # ---------------------------------------------------------------------------
-# Selection engine (V2)
+# Selection engine
 # ---------------------------------------------------------------------------
 
 
@@ -83,10 +95,11 @@ def _advance(
 
 
 # ---------------------------------------------------------------------------
-# V2 Loader node
+# V2.1 Loader node
 # ---------------------------------------------------------------------------
 
-class PromptLibraryLoaderV2:
+
+class PromptLibraryLoaderV21:
     """Load prompts from text files, exposing the selected line + metadata."""
 
     @classmethod
@@ -132,7 +145,7 @@ class PromptLibraryLoaderV2:
                 break
 
         if abs_path is None or not os.path.isfile(abs_path):
-            print(f"[PromptLibraryLoaderV2] Warning: file not found: {prompt_file}")
+            print(f"[PromptLibraryLoaderV21] Warning: file not found: {prompt_file}")
             return ("", "")
 
         if auto_reload:
@@ -148,18 +161,13 @@ class PromptLibraryLoaderV2:
         state = load_state(abs_path)
 
         if manual_line > 0:
-            # ---- 手动指定行：V2 修复割裂 bug ----
-            # 1. 解析 1-based 行号（越界则回绕）。
-            # 2. 同步更新持久 state，使后续模式正确接续。
             idx = (manual_line - 1) % total
             new_state = PromptState(
                 mode=mode,
-                index=(idx + 1) % total,   # sequential 从下一行接续
-                pool=list(range(total)),   # neverrepeat 重置一个完整洗牌池
+                index=(idx + 1) % total,
+                pool=list(range(total)),
                 last_line=idx + 1,
             )
-            # 保留用户当前 mode 的既有进度：乱序模式保留旧 pool，
-            # 但手动跳转后重新洗牌更符合直觉。这里采用“重置”语义。
             save_state(abs_path, new_state)
             return (lines[idx], self._summary(prompt_file, idx + 1, total))
 
@@ -175,16 +183,12 @@ class PromptLibraryLoaderV2:
 
 
 # ---------------------------------------------------------------------------
-# Preview display node (front-end visible panel)
+# V2.1 Preview display node
 # ---------------------------------------------------------------------------
 
-class PromptPreview:
-    """Display the input text on the canvas.
 
-    Written to match AlekPet's confirmed-working ``PreviewTextNode``
-    (ExtrasNode): OUTPUT_NODE=True + RETURN_TYPES=(STRING,) and returns
-    {"ui": {"string": [text]}, "result": (text,)}.
-    """
+class PromptPreviewV21:
+    """Display the input text on the canvas (front-end visible panel)."""
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -207,15 +211,89 @@ class PromptPreview:
 
 
 # ---------------------------------------------------------------------------
-# Registration — V2 node names are distinct from v1 to avoid conflicts
+# V2.1 Text editor node (single-step, chainable)
+# ---------------------------------------------------------------------------
+
+
+class PromptTextEditorV21:
+    """Single-step, chainable text editor for prompts.
+
+    Modes:
+      - replace: replace all occurrences of *find* with *replacement*.
+      - prepend: insert *replacement* immediately before every *find*.
+      - append:  insert *replacement* immediately after every *find*.
+      - delete:  remove all occurrences of *find*.
+
+    Set *regex* to True to treat *find* as a regular expression. Chain several
+    instances together to build arbitrarily complex edit pipelines.
+    """
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "text": ("STRING", {"forceInput": True}),
+                "mode": (
+                    ["replace", "prepend", "append", "delete"],
+                    {"default": "replace"},
+                ),
+                "find": ("STRING", {"default": "", "multiline": True}),
+                "replacement": ("STRING", {"default": "", "multiline": True}),
+                "regex": ("BOOLEAN", {"default": False}),
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("edited",)
+    FUNCTION = "edit"
+    CATEGORY = "Prompt"
+
+    def edit(
+        self,
+        text: str,
+        mode: str,
+        find: str,
+        replacement: str,
+        regex: bool,
+    ) -> Tuple[str]:
+        if not find:
+            return (text,)
+
+        try:
+            if regex:
+                _pattern = re.compile(find)
+            else:
+                _pattern = re.compile(re.escape(find))
+        except re.error as exc:
+            print(f"[PromptTextEditorV21] Regex error: {exc}")
+            return (text,)
+
+        if mode == "replace":
+            result = _pattern.sub(lambda m: replacement, text)
+        elif mode == "prepend":
+            result = _pattern.sub(lambda m: replacement + m.group(0), text)
+        elif mode == "append":
+            result = _pattern.sub(lambda m: m.group(0) + replacement, text)
+        elif mode == "delete":
+            result = _pattern.sub("", text)
+        else:
+            result = text
+
+        return (result,)
+
+
+# ---------------------------------------------------------------------------
+# Registration — V21 classNames are distinct to coexist with V2
 # ---------------------------------------------------------------------------
 
 NODE_CLASS_MAPPINGS = {
-    "ComfyUI_Prompt_Library_V2": PromptLibraryLoaderV2,
-    "ComfyUI_Prompt_Preview": PromptPreview,
+    "ComfyUI_Prompt_Library_V21": PromptLibraryLoaderV21,
+    "ComfyUI_Prompt_Preview_V21": PromptPreviewV21,
+    "ComfyUI_Prompt_Text_Editor": PromptTextEditorV21,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "ComfyUI_Prompt_Library_V2": "ComfyUI Prompt Library V2",
-    "ComfyUI_Prompt_Preview": "Prompt Preview",
+    "ComfyUI_Prompt_Library_V21": "ComfyUI Prompt Library V2.1",
+    "ComfyUI_Prompt_Preview_V21": "Prompt Preview V2.1",
+    "ComfyUI_Prompt_Text_Editor": "Prompt Text Editor",
 }
